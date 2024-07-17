@@ -1,0 +1,23 @@
+<form [formGroup]="dateForm" (ngSubmit)="onSubmit()">
+    <label for="fromDate">From Date: </label>
+    <input type="date" name="fromDate" id="fromDate" formControlName="fromDate">
+    <div class="alert alert-danger" role="alert"
+        *ngIf="dateForm.controls['fromDate'].touched && dateForm.controls['fromDate'].invalid">
+        <ng-container class="alert alert-danger" role="alert"
+            *ngIf="dateForm.controls['fromDate'].hasError('required')">
+            It is required!!
+        </ng-container>
+    </div>
+
+    <label for="formDate">To Date: </label>
+    <input type="date" name="toDate" id="toDate" formControlName="toDate">
+    <div class="alert alert-danger" *ngIf="dateForm.controls['toDate'].touched && dateForm.controls['toDate'].invalid">
+        <ng-container class="alert alert-danger" *ngIf="dateForm.controls['toDate'].hasError('required')">
+            It is required!!
+        </ng-container>
+    </div>
+
+    <button type="submit" [disabled]="dateForm.invalid">Submit</button>
+
+
+</form>

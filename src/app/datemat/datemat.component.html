@@ -1,0 +1,24 @@
+<form [formGroup]="dateForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill">
+      <mat-label>From Date</mat-label>
+      <input matInput [matDatepicker]="fromDatepicker" formControlName="fromDate">
+      <mat-datepicker-toggle matSuffix [for]="fromDatepicker"></mat-datepicker-toggle>
+      <mat-datepicker #fromDatepicker></mat-datepicker>
+    </mat-form-field>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>To Date</mat-label>
+      <input matInput [matDatepicker]="toDatepicker" formControlName="toDate">
+      <mat-datepicker-toggle matSuffix [for]="toDatepicker"></mat-datepicker-toggle>
+      <mat-datepicker #toDatepicker></mat-datepicker>
+    </mat-form-field>
+  
+    <button mat-raised-button color="primary" type="submit">Submit</button>
+  
+    <!-- <div *ngIf="dateForm.errors?.dateRangeInvalid">
+      Please select a to-date with a gap of at least 30 days from the from-date.
+    </div> -->
+  </form>
+  
+  
+  
