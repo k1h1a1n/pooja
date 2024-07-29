@@ -35,44 +35,34 @@ export class SideMenuComponent {
   private http = inject(HttpClient);
   menuData: any;
   uniqueModuleList: any;
-  nestedMenuData: MenuItem[] = [];
-  orderedMenuData: MenuItem[] = [];
+  processedData: any;
+  defaultBackgroundColor = '#d8dde3'; // Default background color for menuLeve 1 elements
+  defaultTextColor = '#353acd';
+
+
 
   constructor() {
 
   }
   ngOnInit() {
+
     this.getMenuData().subscribe((res: ResponseObject) => {
       this.menuData = res.getDynamicMenuList
       let uniqueModuleIDs = [...new Set(res.getDynamicMenuList.map((item) => item.moduleID))];
-      this.mapModuleIdData(uniqueModuleIDs);
-      // debugger
-      this.nestedMenuData = this.buildMenuHierarchy(this.menuData);
-      console.log(this.nestedMenuData);
-
-      // this.orderedMenuData = this.flattenMenuHierarchy(this.nestedMenuData);
-      // console.log(this.orderedMenuData);
-    
-    });
-
+      this.processedData = this.processMenuItems(this.menuData)
+       this.mapModuleIdData(uniqueModuleIDs);
+     });
   }
-
-
-  // getMenuData(): Observable<ResponseObject> {
-  //   // return this.http.get<ResponseObject>('assets/response_1718715757932.json');
-  //   return this.http.get<ResponseObject>('http://imadminapiuat.imagicuat.in/api/Servicing/OfficeReports/GetDynamicMenuList')
-  // }
-
+ 
   getMenuData(): Observable<ResponseObject> {
     const headers = new HttpHeaders({
-      // 'Authorization': 'Bearer your_token_here', 
       'Content-Type': 'application/json'
     });
-    
-    const input = {"UserID":"deepalig@datacomp.in","iuserid":"1"}
+
+    const input = { "UserID": "deepalig@datacomp.in", "iuserid": "1" }
     return this.http.post<ResponseObject>(
       'http://imadminapiuat.imagicuat.in/api/Servicing/OfficeReports/GetDynamicMenuList', input
-      ,{headers}
+      , { headers }
     ).pipe(
       catchError(error => {
         console.error('Error fetching menu data:', error);
@@ -80,8 +70,6 @@ export class SideMenuComponent {
       })
     );
   }
-  
-
 
 
   mapModuleIdData(input: Array<number>) {
@@ -98,32 +86,30 @@ export class SideMenuComponent {
         case 1:
           modifiedObject.name = 'Life Insurance';
           modifiedObject.imgName = '../assets/images/datamaintenance.png';
-          modifiedObject.submenu = this.processFirstLevelMenu(x, this.menuData);
-          //process second level here
-          
+          modifiedObject.submenu = this.processedData.filter((item: any) => item.moduleID === 1);
           break;
         case 2:
           modifiedObject.name = 'General Insurance';
           modifiedObject.imgName = '../assets/images/report.png';
-          modifiedObject.submenu = this.processFirstLevelMenu(x, this.menuData);
+          modifiedObject.submenu = this.processedData.filter((item: any) => item.moduleID === 2);
 
           break;
         case 3:
           modifiedObject.name = 'Other';
           modifiedObject.imgName = '../assets/images/mis.png'
-          modifiedObject.submenu = this.processFirstLevelMenu(x, this.menuData);
+          modifiedObject.submenu = this.processedData.filter((item: any) => item.moduleID === 3);
 
           break;
         case 4:
           modifiedObject.name = 'Common';
           modifiedObject.imgName = '../assets/images/valueaddon.png'
-          modifiedObject.submenu = this.processFirstLevelMenu(x, this.menuData);
+          modifiedObject.submenu = this.processedData.filter((item: any) => item.moduleID === 4);
 
           break;
         case 5:
           modifiedObject.name = 'Admin';
           modifiedObject.imgName = '../assets/images/toolsandutilities.png'
-          modifiedObject.submenu = this.processFirstLevelMenu(x, this.menuData);
+          modifiedObject.submenu = this.processedData.filter((item: any) => item.moduleID === 5);
 
           break;
         default:
@@ -132,60 +118,12 @@ export class SideMenuComponent {
       moduleData.push(modifiedObject);
     })
     this.uniqueModuleList = moduleData;
-    console.log(this.uniqueModuleList , 'binded data')
+    
   }
 
 
   isMenuOpen = false;
-  isMenu1Active = false;
-  isMenu2Active = false;
 
-  // onMenuOpen() {
-  //   this.isMenuOpen = !this.isMenuOpen;
-  //   // this.isMenu1Active = false
-  //   // this.isMenu2Active=false
-  //   // this.uniqueModuleList.forEach((item:any) => {
-  //   //   item.isMenu1Active = false;
-  //   //   item.submenus.forEach((subitem:any) => subitem.isMenu2Active = false);
-  //   // });
-  //   if (!this.isMenuOpen) {
-  //     this.uniqueModuleList.forEach((item: any) => item.isActive = false);
-  //     this.uniqueModuleList.forEach((item: any) => item.submenu.forEach((subItem: any) => subItem.isActive = false));
-  //   }
-  // }
-
-  // onMenu1Click(menuItem: any) {
-  //   if (!this.isMenuOpen) return;
-  //   // this.uniqueModuleList.forEach((item:any) => item.isActive = false);
-  //   // this.uniqueModuleList.forEach((item: any) => item.isActive = false);  
-  //   menuItem.isActive = !menuItem.isActive;
-
-  // }
-
-  // onMenu2Click(submenuItem: any) {
-  //   if (!this.isMenuOpen) return;
-  //   // menuItem.submenu.forEach((subitem: any) => subitem.isActive = false);
-  //   // parentMenu.submenu.forEach((item: any) => item.isActive = false);
-  //   submenuItem.isActive = !submenuItem.isActive;
-  // }
-
-
-
-  //   onMenu1Click(){
-  // this.uniqueModuleList.forEach((item:any) => {
-  //       item.isActive = false;
-  //     });
-  //     this.isMenu1Active=!this.isMenu1Active
-  //  }
-
-
-
-  //   onMenu2Click(){
-  //     // this.uniqueModuleList.item.submenu.forEach((sub:any)=>{
-  //     //   sub.isActive=false;
-  //     //  })
-  //    this.isMenu2Active=!this.isMenu2Active
-  //  }
 
 
   onMenuOpen() {
@@ -195,211 +133,142 @@ export class SideMenuComponent {
     }
   }
 
-  onMenu1Click(menuItem: any) {
-    if (!this.isMenuOpen) return;
-    const wasActive = menuItem.isActive;
-    this.closeAllMenus();
-    menuItem.isActive = !wasActive;  
+
+
+
+  closeAllMenus() {
+    this.uniqueModuleList.forEach((module: { isActive: boolean; submenu: any[]; }) => {
+      module.isActive = false;
+      module.submenu.forEach(submenu => {
+        submenu.isActive = false;
+        submenu.isOpen = false;
+        submenu.submenus.forEach((subItmes: { isActive: boolean; isOpen: boolean; backgroundColor: string; textColor: string; }) => {
+          subItmes.isActive = false;
+          subItmes.isOpen = false;
+
+        });
+      });
+    });
   }
 
-  onMenu2Click(submenuItem: any, parentMenu: any) {
-    if (!this.isMenuOpen) return;
-    const wasActive = submenuItem.isActive;
-    parentMenu.submenu.forEach((item: any) => item.isActive = false);  
-    submenuItem.isActive = !wasActive;  
-  }
 
-  private closeAllMenus() {
-    this.uniqueModuleList.forEach((item: any) => {
-      item.isActive = false;
-      if (item.submenu) {
-        item.submenu.forEach((subItem: any) => subItem.isActive = false);
+
+  onMenu1Click(module: { isActive: any; submenu: any; }) {
+    // Close all other main menus and their submenus
+    this.uniqueModuleList.forEach((m: { isActive: boolean; submenu: { isActive: boolean; isOpen: boolean; submenus: { isActive: boolean; isOpen: boolean; backgroundColor: string; textColor: string; }[]; }[]; }) => {
+      if (m !== module) {
+        m.isActive = false;
+        m.submenu.forEach((s: { isActive: boolean; isOpen: boolean; submenus: { isActive: boolean; isOpen: boolean; backgroundColor: string; textColor: string; }[]; }) => {
+          s.isActive = false;
+          s.isOpen = false;
+          s.submenus.forEach((subItmes: { isActive: boolean; isOpen: boolean; backgroundColor: string; textColor: string; }) => {
+            subItmes.isActive = false;
+            subItmes.isOpen = false;
+
+          });
+        });
       }
     });
 
-
+    module.isActive = !module.isActive;
+    module.submenu.forEach((submenu: { isOpen: boolean; isActive: boolean; submenus: { isOpen: boolean; isActive: boolean; }[]; }) => {
+      submenu.isOpen = false;
+      submenu.isActive = false;
+      submenu.submenus.forEach((subItmes: { isOpen: boolean; isActive: boolean; }) => {
+        subItmes.isOpen = false;
+        subItmes.isActive = false;
+      });
+    }); // Close all submenus when main menu item is clicked
   }
 
+  onMenu2Click(submenu: { isActive: boolean; isOpen: boolean; submenus: { isOpen: boolean; menuLeve: number; backgroundColor: string; textColor: string; }[]; }, module: { submenu: any[]; }) {
+    // Close all other level 2 submenus in this module
+    module.submenu.forEach(s => {
+      if (s !== submenu) {
+        s.isOpen = false;
+        s.isActive = false;
+        s.submenus.forEach((subItmes: { isOpen: boolean; isActive: boolean; backgroundColor: string; textColor: string; }) => {
+          subItmes.isOpen = false;
+          subItmes.isActive = false;
 
- private processFirstLevelMenu(moduleID: number, menuData: any[]) {
-    let secondLevel: Array<any> = [];
+        });
+      }
+    });
 
+    submenu.isActive = !submenu.isActive;
+    submenu.isOpen = !submenu.isOpen;
+    submenu.submenus.forEach((subItmes: { isOpen: boolean; menuLeve: number; backgroundColor: string; textColor: string; }) => {
+      subItmes.isOpen = false; // Close all level 1 submenus when level 2 submenu is clicked
+      if (subItmes.menuLeve === 1 && submenu.isOpen) {
+        subItmes.backgroundColor = this.defaultBackgroundColor;
+        subItmes.textColor = this.defaultTextColor;
+      }
+    });
+  }
 
-    let firstLevel: Array<any> = [];
-    menuData.forEach((menuData , index) => {
-     
-      if(
-      menuData.moduleID === moduleID && menuData.hasChil === '1' && menuData.menuLeve === 0){
-        firstLevel.push(menuData) 
-      
+  onMenu3Click(subItmes: { isActive: boolean; isOpen: boolean; menuLeve: number; backgroundColor: string; textColor: string; }, submenu: { submenus: any[]; }) {
+    // Close all other level 3 submenus in this submenu
+    submenu.submenus.forEach(s => {
+      if (s !== subItmes) {
+        s.isOpen = false;
+        s.isActive = false;
+
+      }
+    });
+
+    subItmes.isActive = !subItmes.isActive;
+    subItmes.isOpen = !subItmes.isOpen;
+    if (subItmes.menuLeve === 1 && subItmes.isOpen) {
+      subItmes.backgroundColor = this.defaultBackgroundColor;
+      subItmes.textColor = this.defaultTextColor;
     }
-      else if(menuData.menuLeve === 1 &&  menuData.hasChil === '1' && menuData.moduleID === moduleID){
-           // create submenus and add subitems in that
-        // secondLevel.push(menuData) 
-    
-       
-  }
-     
-    })
-  
-  
-    return firstLevel;
-
-    
-    
   }
 
-  private buildMenuHierarchy(data: MenuItem[]): MenuItem[] {
-    const menuHierarchy: MenuItem[] = [];
-    const map = new Map<number, MenuItem>();
-    data.forEach(item => {
-      map.set(item.menuID, item);
-    });
 
-    data.forEach(item => {
-    
-        const parent = map.get(item.pareMenuID);
+  processMenuItems(items: any[]): any[] {
+    const output: any[] = [];
+    let currentObject: any | null = null;
+    let currentLevel1Object: any | null = null;
 
-        if (parent) {
-          if (!parent.submenus) {
-            parent.submenus = [];
-          }
-          parent.submenus.push(item)
-        } else {
-          menuHierarchy.push(item);
+    for (const item of items) {
+      if (item.menuLeve === 0) {
+        if (currentObject) {
+          output.push(currentObject);
         }
-      
-    });
+        // Start a new currentObject
+        currentObject = { ...item, submenus: [], level1menus: [] };
+        // Reset level1Object
+        currentLevel1Object = null;
+      } else if (item.menuLeve === 1) {
+        // Add item to submenus of the currentObject
+        if (currentObject) {
+          currentLevel1Object = { ...item, level1menus: [] };
+          currentObject.submenus?.push(currentLevel1Object);
+        }
+      } else if (item.menuLeve === 2) {
+        // Add item to level1menus of the currentLevel1Object
+        if (currentLevel1Object) {
+          currentLevel1Object.level1menus?.push(item);
+        } else if (currentObject) {
+          // If no currentLevel1Object, add to submenus of currentObject
+          currentObject.submenus?.push({ ...item, level1menus: [] });
+        }
+      }
+    }
 
-    return menuHierarchy;
+    // Push the last object to output
+    if (currentObject) {
+      output.push(currentObject);
+    }
+
+    return output;
   }
-
-
-
-  // private buildMenuHierarchy(data: MenuItem[]): MenuItem[] {
-  //   const menuHierarchy: MenuItem[] = [];
-  //   const map = new Map<number, MenuItem>();
-
-  //   // Create a map for quick lookup
-  //   data.forEach(item => {
-  //     item.submenus = []; // Initialize submenus array
-  //     map.set(item.menuID, item);
-  //   });
-
-  //   // Build the hierarchy
-  //   data.forEach(item => {
-  //     if (item.menuLeve === 1) {
-  //       // Top-level menu
-  //       menuHierarchy.push(item);
-  //     } else {
-  //       // Submenu
-  //       const parent = map.get(item.pareMenuID);
-  //       if (parent) {
-  //         parent.submenus?.push(item);
-  //       }
-  //     }
-  //   });
-
-  //   return menuHierarchy;
-  // }
-
-  // private flattenMenuHierarchy(menuHierarchy: MenuItem[]): MenuItem[] {
-  //   const flattenedMenu: MenuItem[] = [];
-
-  //   const traverse = (menu: MenuItem) => {
-  //     flattenedMenu.push(menu);
-  //     if (menu.menuLeve === 2 && menu.submenus && menu.submenus.length > 0) {
-  //       menu.submenus.forEach(submenu => traverse(submenu));
-  //     }
-  //   };
-
-  //   menuHierarchy.forEach(menu => traverse(menu));
-
-  //   return flattenedMenu;
-  // }
-
-
-  // private processFirstLevelMenu(moduleID: number, menuData: any[]) {
-  //   let firstLevel: Array<MenuItem> = [];
-  
-  //   menuData.forEach(menuItem => {
-  //     if (menuItem.moduleID === moduleID && menuItem.menuLeve === 1) {
-  //       menuItem.submenus = menuData.filter(subMenuItem => subMenuItem.pareMenuID === menuItem.menuID && subMenuItem.menuLeve === 2);
-  //       firstLevel.push(menuItem);
-  //     }
-  //   });
-  
-  //   return firstLevel;
-  // }
-
  
-  // private buildMenuHierarchy(data: MenuItem[]): MenuItem[] {
-  //   const menuHierarchy: MenuItem[] = [];
-  
-  //   // // Step 1: Map menu items by menuID for quick access
-  //   data.forEach((item , index) => {
-  //    if(item.hasChil == '1' && item.menuLeve !== 1){
-  //     menuHierarchy.push(item)
-  //    }
-  //   })
-  //   console.log(menuHierarchy)
-  //   return menuHierarchy;
-  // }
-  
-  
-  
-  
-  // private buildMenuHierarchy(data: MenuItem[]): MenuItem[] {
-  //   const menuHierarchy: MenuItem[] = [];
-  //   const map = new Map<number, MenuItem>();
-  
-  //   // Create a map for quick lookup
-  //   data.forEach(item => {
-  //     item.submenus = []; // Initialize submenus array
-  //     map.set(item.menuID, item);
-  //   });
-  
-  //   // Build the hierarchy
-  //   data.forEach(item => {
-  //     if (item.menuLeve === 1) {
-  //       // Top-level menu
-  //       menuHierarchy.push(item);
-  //     } else {
-  //       // Submenu
-  //       const parent = map.get(item.pareMenuID);
-  //       if (parent) {
-  //         parent.submenus?.push(item);
-  //       }
-  //     }
-  //   });
-  
-  //   return menuHierarchy;
-  // }
- 
- 
-
-
-  // private flattenMenuHierarchy(menuHierarchy: MenuItem[]): MenuItem[] {
-  //   const flattenedMenu: MenuItem[] = [];
-
-  //   const traverse = (menu: MenuItem) => {
-  //     flattenedMenu.push(menu);
-  //     if (menu.menuLeve === 2 && menu.submenus && menu.submenus.length > 0) {
-  //       menu.submenus.forEach(submenu => traverse(submenu));
-  //     }
-  //   };
-
-  //   menuHierarchy.forEach(menu => traverse(menu));
-
-  //   return flattenedMenu;
-  // }
-  
-
-  
-  
-
-  
-  
-
-
+  setBackgroundColor(subItmes: any) {
+    if (subItmes.menuLeve === 1) {
+      subItmes.backgroundColor = this.defaultBackgroundColor;
+      subItmes.textColor = this.defaultTextColor;
+    }
+  }// Set the desired background color here
 }
+

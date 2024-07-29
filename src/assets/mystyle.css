@@ -1475,6 +1475,7 @@ html, body, .MainSection
 	text-align:left;
 	padding:10px 11px;
 	cursor:pointer;
+	text-decoration: none;
 }
 .MenuSlideActive .MenusCntnr > ul > li > .MenuLevel_1
 {
@@ -1503,8 +1504,8 @@ html, body, .MainSection
 	background-color:#0957B8;
 	color:#fff;
 }
-.MenusCntnr > ul > li > a.MenuLevel_1_Active i, .MenuLevel_1:hover span:after, .MenuLevel_2:hover span:after,
-.MenusCntnr > ul > li > a.MenuLevel_1_Active span:after,.MenuLevel_2.MenuLevel_2_Active span:after
+.MenusCntnr > ul > li > a.MenuLevel_1_Active i, .MenuLevel_1:hover span:after, .MenuLevel_2:hover span:after,.MenuLevel_3:hover span:after,
+.MenusCntnr > ul > li > a.MenuLevel_1_Active span:after,.MenuLevel_2.MenuLevel_2_Active span:after , .MenuLevel_3.MenuLevel_3_Active span:after
 {
 	transform:rotate(90deg);
 	transition:0.5s ease-out all;
@@ -1515,7 +1516,7 @@ html, body, .MainSection
 {
 	display:none;
 }
-.MenusCntnr > ul > li > a.MenuLevel_1_Active + ul, .MenusCntnr > ul > li .MenuLevel_2_Active + ul
+.MenusCntnr > ul > li > a.MenuLevel_1_Active + ul, .MenusCntnr > ul > li .MenuLevel_2_Active + ul , .MenusCntnr > ul > li .MenuLevel_3_Active + ul
 {
 	display:block;
 }
@@ -1529,7 +1530,9 @@ html, body, .MainSection
 	justify-content:space-between;
 	position:relative;
 	cursor:pointer;
+	text-decoration: none;
 }
+
 .MenuLevel_2:before
 {
 	content:"";
@@ -1599,9 +1602,85 @@ html, body, .MainSection
 }
 
 
+/* Menu 3 related */
+.MenuLevel_3
+{
+	background-color:#EBF4FF;
+	padding:8px 11px;
+	padding-left:55px;
+	display:flex;
+	align-items:center;
+	justify-content:space-between;
+	position:relative;
+	cursor:pointer;
+}
 
 
+.MenuLevel_3:before
+{
+	content:"";
+	position:absolute;
+    width: 4px;
+    height: 4px;
+    background-color: #F1772E;
+    margin-left: -12px;
+    transform: rotate(45deg);
+}
+.MenuLevel_3 span
+{
+	font-size:12px;
+	flex:auto;
+	color:#4e76a6;
+	font-family:PoppinsSB;
+	position:relative;
+}
+.MenuLevel_3_Active:before
+{
+    width: 6px;
+    height: 6px;
+	
+	
+}
 
+.MenuLevel_3_Active + ul
+{
+	background-color:#fff;
+}
+.MenuLevel_3_Active + ul li a
+{
+	font-family:PoppinsR;
+	font-size:12px;
+	color:#437096;
+	text-align:left;
+	padding:5px 11px;
+	padding-left:70px;
+	cursor:pointer;
+	
+	
+}
+
+
+.MenuLevel_3_Active:before
+{
+    width: 6px;
+    height: 6px;
+}
+
+.MenuLevel_3_Active + ul
+{
+	background-color:#fff;
+}
+.MenuLevel_3_Active + ul li a
+{
+	font-family:PoppinsR;
+	font-size:12px;
+	color:#343D4A;
+	text-align:left;
+	padding:5px 11px;
+	padding-left:70px;
+	cursor:pointer;
+
+}
 
 
 

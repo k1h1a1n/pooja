@@ -1,123 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
 </head>
+
 <body>
 	<div class="MainSection">
 		<div class="MenuContainer" [ngClass]="{'MenuSlideActive': isMenuOpen }">
 			<div class="Common100perc MenuLogo">
-				<img class="BigLogo" src="../assets/images/iMagic.png"/>
+				<img class="BigLogo" src="../assets/images/iMagic.png" />
 			</div>
-			<div class="Common100perc TabCntnr" >
+			<div class="Common100perc TabCntnr">
 				<div class="TabSectn">
-					<input type="radio" id="Tab1" name="TabInput" checked/>
+					<input type="radio" id="Tab1" name="TabInput" checked />
 					<label for="Tab1">Life Insurance</label>
-					
+
 					<div class="TabCntnt">
 						<div class="Common100perc SearchDiv">
-							<input type="text" placeholder="Search" class="SearchInput"/>
-							<img src="../assets/images/SearchIcon.png"/>
+							<input type="text" placeholder="Search" class="SearchInput" />
+							<img src="../assets/images/SearchIcon.png" />
 						</div>
 						<div class="MenusCntnr">
 							<ul>
 								<li *ngFor="let module of uniqueModuleList">
-									<!-- <a class="MenuLevel_1" [ngClass]="{'MenuLevel_1_Active': isMenu1Active}" (click)="onMenu1Click()" >
-										<img class="MenuIcon" [src]="item.imgName"/>
-										<span>{{item.name}}</span>
-									</a> -->
-									<a class="MenuLevel_1"   [class.MenuLevel_1_Active]="module.isActive"
-									(click)="onMenu1Click(module)">
-										<img class="MenuIcon" [src]="module.imgName" alt="{{module.name}}"/>
+									<a class="MenuLevel_1" [class.MenuLevel_1_Active]="module.isActive"
+										(click)="onMenu1Click(module)">
+										<img class="MenuIcon" [src]="module.imgName" alt="{{module.name}}" matTooltip="{{module.name}}" matTooltipPosition="right"/>
 										<span>{{module.name}}</span>
 									</a>
-									
+
 									<ul>
 										<li *ngFor="let submenu of module.submenu">
-											
-											<!-- <a class="MenuLevel_2" [ngClass]="{'MenuLevel_2_Active': isMenu2Active}" (click)="onMenu2Click()">
-												<span>{{submenu.menuName}}</span>
-											</a> -->
 											<a class="MenuLevel_2" [class.MenuLevel_2_Active]="submenu.isActive"
-											(click)="onMenu2Click(submenu,module)">
+												(click)="onMenu2Click(submenu,module)">
 												<span>{{submenu.menuName}}</span>
 											</a>
-											<!-- <ul>
-												<li><a>Zones of LIC</a></li>
-												<li><a>Divisions of LIC</a></li>
-												<li><a>Branches of LIC</a></li>
-												<li><a>Agencies</a></li>
-												<li><a>Doctors on LIC Panel</a></li>
-												<li><a>Company P.A. Code</a></li>
-												<li><a>Plans of LIC</a></li>
-												<li><a>NAV Downloads</a></li>
-												<li><a>Area Master</a></li>
-												<li><a>Merge Area</a></li>
-											
-											</ul> -->
 											<ul>
-												<li a *ngFor="let subItmes of submenu.submenus">
-													<a>{{subItmes.menuName}}</a>
+												<li *ngFor="let subItmes of submenu.submenus">
+													<a *ngIf="subItmes.menuLeve === 2">{{subItmes.menuName}}</a>
+													<a *ngIf="subItmes.menuLeve === 1" class="MenuLevel_2"
+														(click)="onMenu3Click(subItmes,submenu)" [ngStyle]="{'background-color': subItmes.backgroundColor, 'color': subItmes.textColor}"
+														[class.MenuLevel_3_Active]="subItmes.isActive">
+														<span>{{ subItmes.menuName }}</span>
+													</a>
+													<ul>
+														<li *ngFor="let x of subItmes.level1menus">
+															<a>
+																<span>{{ x.menuName }}</span>
+															</a>
+														</li>
+													</ul>
 												</li>
 											</ul>
 										</li>
-										<!-- <li>
-											<a class="MenuLevel_2">
-												<span>Customer Management</span>
-											</a>
-										</li>
-										<li>
-											<a class="MenuLevel_2">
-												<span>Proposal & Policy Management</span>
-											</a>
-										</li>
-										<li>
-											<a class="MenuLevel_2">
-												<span>Premium Management</span>
-											</a>
-										</li>
-										<li>
-											<a class="MenuLevel_2" >
-												<span>Commission Data</span>
-											</a>
-										</li>
-										<li>
-											<a class="MenuLevel_2">
-												<span>Loan Transactions</span>
-											</a>
-										</li> -->
 									</ul>
 								</li>
-								
 							</ul>
 						</div>
 					</div>
-				</div>    
-				
+				</div>
+
 				<div class="TabSectn">
-					<input type="radio" id="Tab2" name="TabInput"/>
+					<input type="radio" id="Tab2" name="TabInput" />
 					<label for="Tab2">Wealth Management</label>
-					
+
 					<div class="TabCntnt">
 						Wealth Management content...
 					</div>
 				</div>
-				
+
 			</div>
 		</div>
 		<div class="MainOuterContainer">
-			<div class="TopSection" >
-				<img (click)="onMenuOpen()" class="MenuBtn" [ngClass]="{'MenuBtnActive' :isMenuOpen }" src="../assets/images/menubtn.png" />
+			<div class="TopSection">
+				<img (click)="onMenuOpen()" class="MenuBtn" [ngClass]="{'MenuBtnActive' :isMenuOpen }"
+					src="../assets/images/menubtn.png" />
 				<div class="LoginSect">
 					<span>Ajay Arora</span>
-					<img src="../assets/images/ajaysir.png"/>
+					<img src="../assets/images/ajaysir.png" />
 				</div>
 			</div>
-			
+
 			<div class="MiddleContainer_Outer">
-				<div class="HeaderDiv" >
+				<div class="HeaderDiv">
 					<div class="Common100perc HeaderTabsDiv">
 						<div id="Tab1" class="Common25perc HeaderTab HeaderActive">Recent Items</div>
 						<div id="Tab2" class="Common25perc HeaderTab">App Usage Analytics</div>
@@ -125,11 +93,11 @@
 						<div id="Tab4" class="Common25perc HeaderTab">Business in-Force</div>
 					</div>
 				</div>
-		
+
 				<div class="MiddleContainer_PA">
-				
+
 					<div class="TabContainer">
-					
+
 						<div id="Tab1Content" class="Common100perc">
 							<div class="MiddleTabCntnr">
 								<div class=" RecentTab">
@@ -170,26 +138,27 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div id="Tab2Content" class="Common100perc CommonMT25px">
 							App Usage Analytics content...
 						</div>
-						
+
 						<div id="Tab3Content" class="Common100perc CommonMT25px SalesPerform">
 							Sales Performance content...
 						</div>
-						
+
 						<div id="Tab4Content" class="Common100perc CommonMT25px SalesPerform">
 							Business in-Force content...
 						</div>
-						
+
 					</div>
-					
+
 				</div>
 			</div>
-		
-		</div>    
-		
+		</div>
+
 	</div>
+	
 </body>
+
 </html>

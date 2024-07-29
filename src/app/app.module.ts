@@ -19,7 +19,7 @@ import { MatButtonModule } from '@angular/material/button';
 // import { DialogcontentComponent } from './dialogcontent/dialogcontent.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { DatematComponent } from './datemat/datemat.component';
-
+import {MatTooltipModule} from '@angular/material/tooltip';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +40,8 @@ import { DatematComponent } from './datemat/datemat.component';
     MatFormFieldModule,
     MatInputModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    MatTooltipModule
   ],
   providers: [
     provideAnimationsAsync(),
